@@ -157,10 +157,6 @@ void CAN_calc()
   }
   else if (Byte_0x388_1 == 41)
   {
-    //Nur wenn RESET gehalten wird und der Tempomat aktiv ist, wird die Geschwindigkeit aktualisiert
-    //Sonst: V = 30 km/h V_tempo = 60 km/h Druck auf Reset -> V_tempo = 30
-    //if(tempo_reset == true && tempo_aktiv == true) Tempo_geschwindigkeit = Geschwindigkeit;
-    // Tempo_geschwindigkeit = Geschwindigkeit;
     //Tempomat RESET wird gedrückt
     tempo_set == false;
     tempo_reset == true;
