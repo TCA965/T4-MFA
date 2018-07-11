@@ -1,7 +1,7 @@
 //MFA für T4 unter Verwendung von MCP2515 und MCP2551 für die Kommunikation mit dem CAN-Bus
 //DOGM128-R wird als Display verwendet
 //Optokoppler über Software-Serial mit K-Linie verbunden, um Fehlercodes auszulesen
-//Thaddäus Köhler / Januar 2018
+//Thaddäus Köhler / Juli 2018
 
 
 //Verwendete Bibliotheken
