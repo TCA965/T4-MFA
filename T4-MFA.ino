@@ -30,8 +30,6 @@ const int Hebel = A3;
 const int Oel_Temp_Pin = A5;
 const int Aussen_Temp_Pin = A4;
 
-int Oel[5];
-int Index = 0;
 
 //Software-Serial RX, TX
 SoftwareSerial mySerial(4, 3);
@@ -54,10 +52,10 @@ byte Byte_0x288_4, Byte_0x320_0, Byte_0x320_1, Byte_0x320_2, Byte_0x320_4, Byte_
 byte Byte_0x420_3, Byte_0x420_4, Byte_0x420_5, Byte_0x480_2, Byte_0x480_3;
 
 //Variablen für berechnete Werte
-int Geschwindigkeit,  Drehzahl, Oeltemp, Wassertemp1, Wassertemp2, Gaspedal, Tank, range, seite;
-double Oel_Temp, Aussen_Temp;
+int Geschwindigkeit,  Drehzahl, Oeltemp, Wassertemp1, Wassertemp2, Gaspedal, Tank, seite;
+double Oel_Temp, Oel_Temp_alt, Aussen_Temp;
 int Tempo_geschwindigkeit = 0;
-double Tank_berechnet;
+float Tank_berechnet;
 double Reichweite = 0;
 double Geschwindigkeit_trip = 0;
 unsigned long CurrentVB = 1;
@@ -77,7 +75,7 @@ boolean speichern = false;
 
 //Gesamt Variablen
 //Strecke in m (Hilfsvariable)
-double _strecke = 0;
+float _strecke = 0;
 //Strecke in 100m
 unsigned long liter_ges = 0;
 unsigned long strecke_ges = 0;
@@ -109,9 +107,15 @@ boolean restart_pressed = false;
 boolean next_pressed = false;
 boolean next_pressed_old = false;
 boolean next_val = false;
-unsigned long lastDebounceTime = 0; 
-unsigned long debounceDelay = 50;  
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 50;
 
+//Durchschnittsverbrauch über letzten 5 km ausgeben
+float FuenfKm[5] = { 0, 0, 0, 0, 0 };
+int FuenfKmStrecke = 0;
+int FuenfKmLiter = 0;
+int FuenfKmZaehler = 0;
+float FuenfKmRes = 0;
 
 void setup()
 {
@@ -119,10 +123,10 @@ void setup()
   dogm.setFont(font_6x10);
   //Hintergrundbeleuchtung als Ausgang definieren
   pinMode(LED_Backlight, OUTPUT);
-  pinMode(Hebel, INPUT);  
+  pinMode(Hebel, INPUT);
   pinMode(Oel_Temp_Pin, INPUT);
   pinMode(Aussen_Temp_Pin, INPUT);
- 
+
   //LCD aus Tag-Modus einschalten
   analogWrite(LED_Backlight, 200);
 
@@ -130,7 +134,7 @@ void setup()
   mySerial.begin(9600);
 
   //CAN-Prozessoren verbinden
-  START_INIT:
+START_INIT:
 
   //VW-Motorcan nutzt 500kB/s
   if (CAN_OK == CAN.begin(CAN_500KBPS))
@@ -143,7 +147,7 @@ void setup()
     delay(100);
     goto START_INIT;
   }
-  
+
 
   //Es werden beide Masken auf 0x7ff (dec 2047) gesetzt.
   //0x7ff sagt aus, das alle 11 Bit der normalen ID mit den Filtern verglichen werden

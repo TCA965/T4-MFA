@@ -67,8 +67,15 @@ void CAN_calc()
 {
   //Berechnung der Motor 1 Daten
   //Kupplung
-  if (Byte_0x280_0 == 97) kupplung = true;
-  else if (Byte_0x280_0 == 105) kupplung = false;
+  if (Byte_0x280_0 == 97)
+  { 
+     kupplung = true;
+     tempo_aktiv = false;
+   }
+  else if (Byte_0x280_0 == 105) 
+  {
+    kupplung = false;
+  }
 
   //Drehzahl
   Drehzahl = (Byte_0x280_4 + 256 * Byte_0x280_3) / 4;
@@ -93,18 +100,18 @@ void CAN_calc()
   //Bremspedal und Tempomat aktiv/inaktiv
   if (Byte_0x288_2 == 16)
   {
-    bremse == false;
+    bremse = false;
   }
   else if (Byte_0x288_2 == 19)
   {
-    bremse == true;
-    tempo_aktiv == false;
+    bremse = true;
+    tempo_aktiv = false;
   }
   else if (Byte_0x288_2 == 80)
   {
     //Geschwindigkeit Tempomat
     Tempo_geschwindigkeit = Byte_0x288_4 * 1.34;
-    tempo_aktiv == true;
+    tempo_aktiv = true;
   }
 
   //Berechnung der KI 1 Daten
@@ -118,11 +125,12 @@ void CAN_calc()
 
   //Tankinhalt
   Tank = Byte_0x320_2;
+  if (Tank > 130) Tank -= 130;
 
   //Geschwindigkeit
   Geschwindigkeit = Byte_0x320_4 * 1.34;
-  
-  
+
+
 
   //Berechnung der Motor 3 Daten
   //Tempomat
@@ -145,17 +153,17 @@ void CAN_calc()
     //Tempomat SET wird gedrückt
     tempo_set == true;
     tempo_reset == false;
-    //Tempo_geschwindigkeit = Geschwindigkeit; 
+    //Tempo_geschwindigkeit = Geschwindigkeit;
   }
   else if (Byte_0x388_1 == 41)
   {
     //Nur wenn RESET gehalten wird und der Tempomat aktiv ist, wird die Geschwindigkeit aktualisiert
     //Sonst: V = 30 km/h V_tempo = 60 km/h Druck auf Reset -> V_tempo = 30
     //if(tempo_reset == true && tempo_aktiv == true) Tempo_geschwindigkeit = Geschwindigkeit;
-   // Tempo_geschwindigkeit = Geschwindigkeit;
+    // Tempo_geschwindigkeit = Geschwindigkeit;
     //Tempomat RESET wird gedrückt
     tempo_set == false;
-    tempo_reset == true;    
+    tempo_reset == true;
   }
 
   //Berechnung der KI 2 Daten
@@ -176,7 +184,7 @@ void CAN_calc()
   else if (Byte_0x420_5 != 0)
   {
     licht == true;
-    analogWrite(LED_Backlight, 75);
+    analogWrite(LED_Backlight, 70);
   }
 
   //Berechnung der Motor 3 Daten
@@ -199,12 +207,15 @@ void CAN_VBcalc()
       //Fand kein ÜB statt, wird einfach die Differenz gebildet
       VB = CurrentVB - LastVB;
     }
+    //Korrekturfaktor: Verbrauch wird circa 7% zu gering angezeigt, daher wird VB mit 1.07 multipliziert
+    VB = VB * 1.08;
     //VB entspricht dem Verbrauch in µl pro halber Sekunde, multipliziert man diesen Wert mit 0.0072 kommt man auf l/h
     //Die Variable "liter" enthält die insgesamt verbrauchte Diesel-Menge seit Start (in µL)
-    liter = liter + VB;
+    liter = liter + VB ;
+    FuenfKmLiter = FuenfKmLiter + VB;
     liter_ges = liter_ges + VB;
     VBh = VB * 0.0072;
-    Tank_berechnet = 80.00 - (liter_ges / 1000000);
+    Tank_berechnet = 80.00 - ((float)liter_ges / 1000000);
     LastVB = CurrentVB;
   }
 }

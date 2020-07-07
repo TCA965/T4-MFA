@@ -1,24 +1,7 @@
 #include <EEPROM.h>
 #include <Arduino.h>  // for type definitions
 
-/*template <class T> int EEPROM_writeAnything(int ee, const T& value)
-{
-  const byte* p = (const byte*)(const void*)&value;
-  unsigned int i;
-  for (i = 0; i < sizeof(value); i++)
-    EEPROM.write(ee++, *p++);
-  return i;
-}
 
-template <class T> int EEPROM_readAnything(int ee, T& value)
-{
-  byte* p = (byte*)(void*)&value;
-  unsigned int i;
-  for (i = 0; i < sizeof(value); i++)
-    *p++ = EEPROM.read(ee++);
-  return i;
-}
-*/
 void EEPROMWritelong(int address, long value)
 {
   //Decomposition from a long to 4 bytes by using bitshift.
@@ -29,10 +12,10 @@ void EEPROMWritelong(int address, long value)
   byte one = ((value >> 24) & 0xFF);
 
   //Write the 4 bytes into the eeprom memory.
-  EEPROM.write(address, four);
-  EEPROM.write(address + 1, three);
-  EEPROM.write(address + 2, two);
-  EEPROM.write(address + 3, one);
+  EEPROM.update(address, four);
+  EEPROM.update(address + 1, three);
+  EEPROM.update(address + 2, two);
+  EEPROM.update(address + 3, one);
 }
 
 
