@@ -1,5 +1,3 @@
-boolean _sperre = true;
-
 void calc()
 {
   if (Geschwindigkeit > 5)
@@ -21,17 +19,6 @@ void calc()
       strecke++ ;
       strecke_ges++;
       _strecke = 0;
-      FuenfKmStrecke++;
-    }
-
-    //Alle 1 km (10 * 100m) den Zähler für den Letzt-5-km-Schnitt erhöhen und die Hilfsvariablen leeren
-    if (strecke % 10 == 1) _sperre = false;
-    if (strecke % 10 == 0 && _sperre == false) {
-      FuenfKmZaehler++;
-      FuenfKmStrecke = 0;
-      FuenfKmLiter = 0;
-      _sperre = true;
-      if (FuenfKmZaehler >= 5) FuenfKmZaehler = 0;
     }
     fahrzeit++;
   }
@@ -42,31 +29,10 @@ void calc()
     float _hilf = (1000 / (float)strecke);
     float _hilf2 = ((float)liter / 1000000);
     VBtrip = (_hilf * _hilf2);
-
-
-    
-
-
   }
   else
   {
     VBtrip = 0;
-  }
-
-  if (FuenfKmStrecke > 0 && FuenfKmLiter > 0) {
-    //Auswerten des Letzt-5-km-Schnitts
-    float _hilf = (1000 / (float)FuenfKmStrecke);
-    float _hilf2 = ((float)FuenfKmLiter / 1000000);
-    FuenfKm[FuenfKmZaehler] = (_hilf * _hilf2);
-
-    int _hilf3 = 0;
-
-    for (int i = 0; i < 5; i++) {
-      if (FuenfKm[i] != 0) _hilf3++;
-      FuenfKmRes = FuenfKm[0] + FuenfKm[1] + FuenfKm[2] + FuenfKm[3] + FuenfKm[4];
-    }
-
-    FuenfKmRes = FuenfKmRes / _hilf3;
   }
   //Durchschnittsverbrauch seit manuellem Reset in 10*ml / 100 km
   if (strecke_ges > 0)
@@ -87,15 +53,6 @@ void calc()
     Geschwindigkeit_trip = (360 * ((float)strecke / (float)fahrzeit));
   }
   else Geschwindigkeit_trip = 0;
-
-  //Wenn der Motor läuft, aber kein Verbrauch erkannt wird, liegt offenbar ein Fehler vor und die CAN-Kommunikation startet neu
-  if (Drehzahl > 800 &&  VB < 1) {
-    //restart();
-  }
-  //Wenn der Motor über Leerlaufdrehzahl läuft, aber keine Strecke zurückgelegt wird (über einen längeren Zeitraum), liegt auch ein Fehler vor
-  if (Drehzahl > 1000 && _strecke < 1 && fahrzeit > 2 && strecke < 1) {
-    //restart();
-  }
 }
 
 void analog_temp()
@@ -106,19 +63,18 @@ void analog_temp()
   Temp2 = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp2 * Temp2 )) * Temp2 );
   Oel_Temp = Temp2 - 278;            // Convert Kelvin to Celcius und ziehe einen Offset von 4 ab
 
-  if (Oel_Temp < ( Oel_Temp_alt - 10 )) {
-    Oel_Temp = Oel_Temp_alt;
+  if (Oel_Temp_alt < Aussen_Temp || Oel_Temp < Aussen_Temp)
+  {
+    Oel_Temp_alt = Aussen_Temp;
+    Oel_Temp = Aussen_Temp;
   }
-
   if (Oel_Temp < 70) Oel_Temp = 0.3 * Oel_Temp + 0.7 * Oel_Temp_alt;
   if (Oel_Temp > 70) {
     if (licht) //Falls das Licht an ist, wird der Temperaturwert des Öls verfälscht. Daher wird die Temperatur angepasst
     {
-      Oel_Temp = 0.1 * (0.8 * Oel_Temp) + 0.9 * Oel_Temp_alt;
+      Oel_Temp = Oel_Temp * 0.8 + 9;
     }
-    else {
-      Oel_Temp = 0.1 * Oel_Temp + 0.9 * Oel_Temp_alt;
-    }
+    Oel_Temp = 0.1 * Oel_Temp + 0.9 * Oel_Temp_alt;
   }
   Oel_Temp_alt = Oel_Temp;
 
@@ -178,7 +134,7 @@ void HebelAuswerten()
       restart_pressed = true;
       restart_start = currentMillis;
     }
-    if (currentMillis - restart_start > 1500)
+    if (currentMillis - restart_start > 3000)
     {
       restart();
       restart_pressed = false; //Reset zurücksetzen
@@ -205,9 +161,8 @@ void HebelAuswerten()
       // Ist Taster gedrückt, schalte Bildschirm um
       if (next_val == true) {
         seite++;
-        if (seite >= 7) seite = 0; //Mit DEBUG und NEW Bildschirm
         //if (seite >= 6) seite = 0; //Mit DEBUG Bildschirm
-        //if (seite >= 5) seite = 0; //Ohne DEBUG Bildschirm
+        if (seite >= 5) seite = 0; //Ohne DEBUG Bildschirm
       }
     }
   }
@@ -223,7 +178,7 @@ void restart()
   CAN.begin(CAN_5KBPS);
 
   analogWrite(LED_Backlight, 0);
-  delay(1000);
+  delay(2000);
 
   //(SW)Serielle-Schnittstelle mit 9600 baud initialisieren (Benötigt vom Motorsteuergerät)
   mySerial.begin(9600);

@@ -110,12 +110,6 @@ boolean next_val = false;
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 50;
 
-//Durchschnittsverbrauch über letzten 5 km ausgeben
-float FuenfKm[5] = { 0, 0, 0, 0, 0 };
-int FuenfKmStrecke = 0;
-int FuenfKmLiter = 0;
-int FuenfKmZaehler = 0;
-float FuenfKmRes = 0;
 
 void setup()
 {

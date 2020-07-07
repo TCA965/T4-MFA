@@ -212,7 +212,6 @@ void CAN_VBcalc()
     //VB entspricht dem Verbrauch in µl pro halber Sekunde, multipliziert man diesen Wert mit 0.0072 kommt man auf l/h
     //Die Variable "liter" enthält die insgesamt verbrauchte Diesel-Menge seit Start (in µL)
     liter = liter + VB ;
-    FuenfKmLiter = FuenfKmLiter + VB;
     liter_ges = liter_ges + VB;
     VBh = VB * 0.0072;
     Tank_berechnet = 80.00 - ((float)liter_ges / 1000000);

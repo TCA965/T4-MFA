@@ -33,9 +33,6 @@ void dogm_print()
       case 5:
         seite5();
         break;
-      case 6:
-        seite6();
-        break;
     }
     analog_temp();
   }
@@ -80,7 +77,7 @@ void seite0()
 
     dogm.setXY(35, 19);
     dogm.setFont(font_7x14);
-    dogm.print(Reichweite, 0);
+    dogm.print(Reichweite,0);
     dogm.setFont(font_5x8);
     dogm.print(" km");
 
@@ -189,7 +186,7 @@ void seite3()
 
     dogm.setXY(35, 35);
     dogm.setFont(font_7x14);
-    dogm.print(Geschwindigkeit_trip, 0);
+    dogm.print(Geschwindigkeit_trip,0);
     dogm.setFont(font_5x8);
     dogm.print(" km/h");
 
@@ -240,39 +237,39 @@ void seite4()
     dogm.setFont(font_7x14);
     dogm.print(VBges);
 
-    if (VBges > 10)
-    {
-      // l/100 km Symbol
-      dog_SetBitmapP(87, 46, ver11, 8, 8);
-      dog_SetBitmapP(95, 46, ver12, 8, 8);
-      dog_SetBitmapP(97, 46, ver13, 8, 8);
-      dog_SetBitmapP(87, 38, ver21, 8, 8);
-      dog_SetBitmapP(95, 38, ver22, 8, 8);
-      dog_SetBitmapP(97, 38, ver23, 8, 8);
+   if(VBges > 10) 
+    { 
+    // l/100 km Symbol
+    dog_SetBitmapP(87, 46, ver11, 8, 8);
+    dog_SetBitmapP(95, 46, ver12, 8, 8);
+    dog_SetBitmapP(97, 46, ver13, 8, 8);
+    dog_SetBitmapP(87, 38, ver21, 8, 8);
+    dog_SetBitmapP(95, 38, ver22, 8, 8);
+    dog_SetBitmapP(97, 38, ver23, 8, 8);
     }
     else
-    { // l/100 km Symbol
-      dog_SetBitmapP(80, 46, ver11, 8, 8);
-      dog_SetBitmapP(88, 46, ver12, 8, 8);
-      dog_SetBitmapP(90, 46, ver13, 8, 8);
-      dog_SetBitmapP(80, 38, ver21, 8, 8);
-      dog_SetBitmapP(88, 38, ver22, 8, 8);
-      dog_SetBitmapP(90, 38, ver23, 8, 8);
+    {// l/100 km Symbol
+    dog_SetBitmapP(80, 46, ver11, 8, 8);
+    dog_SetBitmapP(88, 46, ver12, 8, 8);
+    dog_SetBitmapP(90, 46, ver13, 8, 8);
+    dog_SetBitmapP(80, 38, ver21, 8, 8);
+    dog_SetBitmapP(88, 38, ver22, 8, 8);
+    dog_SetBitmapP(90, 38, ver23, 8, 8);
     }
 
     //Tankinhalt
     /* dogm.setXY(4, 19);
-      dogm.setFont(font_6x10);
-      dogm.print("Tank");
-      dogm.setFont(font_5x8);
-      dogm.print(" gemessen");
-      dogm.setFont(font_6x10);
-      dogm.print(" ");
+     dogm.setFont(font_6x10);
+     dogm.print("Tank");
+     dogm.setFont(font_5x8);
+     dogm.print(" gemessen");
+     dogm.setFont(font_6x10);
+     dogm.print(" ");
 
-      dogm.setFont(font_7x14);
-      dogm.print(Tank);
-      dogm.setFont(font_5x8);
-      dogm.print(" l");
+     dogm.setFont(font_7x14);
+     dogm.print(Tank);
+     dogm.setFont(font_5x8);
+     dogm.print(" l");
     */
 
     //Tankinhalt
@@ -281,7 +278,7 @@ void seite4()
     dogm.print("Tank");
     dogm.setXY(50, 19);
     dogm.setFont(font_7x14);
-    dogm.print(Tank_berechnet, 1);
+    dogm.print(Tank_berechnet,1);
     dogm.setFont(font_5x8);
     dogm.print(" l");
 
@@ -301,10 +298,10 @@ void seite5()
     dogm.print("Strecke");
     dogm.setXY(50, 35);
     dogm.setFont(font_7x14);
-    dogm.print((strecke_ges / 10));
+    dogm.print((strecke_ges/10));
     dogm.setFont(font_5x8);
     dogm.print(" km");
-
+    
     //Verbrauchte Liter
     dogm.setXY(4, 19);
     dogm.setFont(font_6x10);
@@ -313,48 +310,10 @@ void seite5()
     dogm.print(((float)liter_ges / 1000000));
     dogm.setFont(font_5x8);
     dogm.print(" l");
-
-
-  } while ( dogm.next() );
-}
-
-void seite6()
-{
-  //5 px Breit, 8 px Hoch
-  dogm.start();
-  do {
-    schreibeOben_Unten("NEW");
-
-    //Gesamte Strecke
-    dogm.setXY(4, 35);
-    dogm.setFont(font_5x8);
-    dogm.print(" ");
-    dogm.print(FuenfKm[0], 1);
-    dogm.print(" ");
-    dogm.print(FuenfKm[1], 1);
-    dogm.print(" ");
-    dogm.print(FuenfKm[2], 1);
-    dogm.print(" ");
-    dogm.print(FuenfKm[3], 1);
-    dogm.print(" ");
-    dogm.print(FuenfKm[4], 1);
-    dogm.print(" ");
-
-    //Verbrauchte Liter
-    dogm.setXY(4, 19);
-    dogm.setFont(font_5x8);
-    dogm.print("Gesamt: ");
-    dogm.print(FuenfKmRes);
-    dogm.print(" l KM:");
-    dogm.print(FuenfKmZaehler);
     
-    dogm.print(" ");
-    dogm.print(strecke);
-
 
   } while ( dogm.next() );
 }
-
 
 
 void schreibeOben_Unten(String Anzeige)
@@ -365,7 +324,7 @@ void schreibeOben_Unten(String Anzeige)
   dogm.print(Anzeige);
   dog_SetBitmapP(89, 60, thermo, 8, 8);
   dogm.setXY(100, 53);
-  dogm.print(Aussen_Temp, 0);
+  dogm.print(Aussen_Temp,0);
   dog_SetBitmapP(105, 59, grad, 8, 8);
   dogm.setXY(114, 53);
   dogm.print("C");
@@ -390,7 +349,7 @@ void schreibeOben_Unten(String Anzeige)
   dog_SetBitmapP(85, 9, oil1, 8, 8);
   dog_SetBitmapP(93, 9, oil2, 8, 8);
   dogm.setXY(100, 3);
-  dogm.print(Oel_Temp, 0);
+  dogm.print(Oel_Temp,0);
   if (Oel_Temp <= 99) {
     dog_SetBitmapP(105, 9, grad, 8, 8);
     dogm.setXY(114, 3);
