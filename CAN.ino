@@ -25,6 +25,7 @@ void CAN_rx()
         {
           Byte_0x288_1 = buf[1];
           Byte_0x288_2 = buf[2];
+          Byte_0x288_4 = buf[4];
           break;
         }
       //Nachricht kommt von KI 1
@@ -101,6 +102,8 @@ void CAN_calc()
   }
   else if (Byte_0x288_2 == 80)
   {
+    //Geschwindigkeit Tempomat
+    Tempo_geschwindigkeit = Byte_0x288_4 * 1.34;
     tempo_aktiv == true;
   }
 
@@ -118,6 +121,8 @@ void CAN_calc()
 
   //Geschwindigkeit
   Geschwindigkeit = Byte_0x320_4 * 1.34;
+  
+  
 
   //Berechnung der Motor 3 Daten
   //Tempomat
@@ -140,14 +145,14 @@ void CAN_calc()
     //Tempomat SET wird gedrückt
     tempo_set == true;
     tempo_reset == false;
-    Tempo_geschwindigkeit = Geschwindigkeit; 
+    //Tempo_geschwindigkeit = Geschwindigkeit; 
   }
   else if (Byte_0x388_1 == 41)
   {
     //Nur wenn RESET gehalten wird und der Tempomat aktiv ist, wird die Geschwindigkeit aktualisiert
     //Sonst: V = 30 km/h V_tempo = 60 km/h Druck auf Reset -> V_tempo = 30
     //if(tempo_reset == true && tempo_aktiv == true) Tempo_geschwindigkeit = Geschwindigkeit;
-    Tempo_geschwindigkeit = Geschwindigkeit;
+   // Tempo_geschwindigkeit = Geschwindigkeit;
     //Tempomat RESET wird gedrückt
     tempo_set == false;
     tempo_reset == true;    
@@ -182,7 +187,7 @@ void CAN_calc()
 
 void CAN_VBcalc()
 {
-  //Sekündliche Berechnung des Verbrauchs in µl
+  //Halbsekündliche Berechnung des Verbrauchs in µl
   if (currentMillis - VB_lastMillis >= VB_interval)
   {
     VB_lastMillis = currentMillis;
@@ -194,11 +199,11 @@ void CAN_VBcalc()
       //Fand kein ÜB statt, wird einfach die Differenz gebildet
       VB = CurrentVB - LastVB;
     }
-    //VB entspricht dem Verbrauch in µl pro Sekunde, multipliziert man diesen Wert mit 0.0036 kommt man auf l/h
+    //VB entspricht dem Verbrauch in µl pro halber Sekunde, multipliziert man diesen Wert mit 0.0072 kommt man auf l/h
     //Die Variable "liter" enthält die insgesamt verbrauchte Diesel-Menge seit Start (in µL)
     liter = liter + VB;
     liter_ges = liter_ges + VB;
-    VBh = VB * 0.0036;
+    VBh = VB * 0.0072;
     Tank_berechnet = 80.00 - (liter_ges / 1000000);
     LastVB = CurrentVB;
   }
