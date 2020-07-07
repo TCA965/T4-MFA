@@ -1,3 +1,5 @@
+boolean _sperre = true;
+
 void calc()
 {
   if (Geschwindigkeit > 5)
@@ -5,28 +7,55 @@ void calc()
     VBkm = (VBh * 100) / Geschwindigkeit;
   }
   else VBkm = VBh;
-
+  currentMillis = millis();
   //Alle 1000ms wird über die aktuelle Geschwindigkeit die gefahrene Strecke ermittelt
   if (currentMillis - strecke_lastMillis >= strecke_interval)
   {
-    strecke_lastMillis = currentMillis;
+
     //Geschwindigkeit in km/h : 3.6 = Geschwindigkeit in m/s
     //Intervall von 1s = Strecke nach 1 s = Geschwindigkeit in m/s
-    _strecke = _strecke + (Geschwindigkeit / 3.2 ); // Geschwindigkeit / 3.6 (m/s) * 0.88 (Gemessene Abweichung) == Geschwindigkeit / 3,2
-    //Nach 100m werden die Variablen für die Strecke erhöht
-    if (_strecke >= 100)
-    {
-      strecke++ ;
-      strecke_ges++;
+
+    // Geschwindigkeit (in km/h) / 3.6  (=m/s) * Zeit = Meter
+    //10.06.2019: Stimmt nicht: Gefahrene Strecke wurde 2,8% zu wenig angegeben. Daher 1.028 als Korrekturfaktor
+    //Korrekturfaktor gelöscht
+
+    //13.07.2019: Stimmt nicht: Gefahrene Strecke wurde 1.2% zu viel angegeben. Daher 0.988 als Korrekturfaktor
+
+    //11.05.2020: MFA zeigt 1% zu wenig Strecke an. Korrekturfaktor wird wieder auf 1 gesetzt
+    _strecke = _strecke + ( (Geschwindigkeit / 3.6 ) * ((currentMillis - strecke_lastMillis) / strecke_interval) * 1);
+
+    strecke_lastMillis = currentMillis;
+
+    if (_strecke >= 10) {
+      strecke += _strecke;
+      strecke_ges += _strecke;
+      FuenfKmStrecke += _strecke;
       _strecke = 0;
+
     }
+
+
+    //Alle 1 km den Zähler für den Letzt-5-km-Schnitt erhöhen und die Hilfsvariablen leeren
+    if (strecke % 1000 > 50) _sperre = false;
+    if (strecke % 1000 < 50 && _sperre == false) {
+      FuenfKm[0] = FuenfKm[1];
+      FuenfKm[1] = FuenfKm[2];
+      FuenfKm[2] = FuenfKm[3];
+      FuenfKm[3] = FuenfKm[4];
+      FuenfKm[4] = FuenfKm[5];
+      FuenfKm[5] = 0;
+      FuenfKmStrecke = 0;
+      FuenfKmLiter = 0;
+      _sperre = true;
+    }
+
     fahrzeit++;
   }
   //Durchschnittsverbrauch: 100km / Gefahrene Strecke in km * Verbrauchte menge in l
-  // 100km = 1.000 (100*m)
+  // 100km = 100.000 (100*m)
   if (strecke > 0 && liter > 0)
   {
-    float _hilf = (1000 / (float)strecke);
+    float _hilf = (100000 / (float)strecke);
     float _hilf2 = ((float)liter / 1000000);
     VBtrip = (_hilf * _hilf2);
   }
@@ -34,10 +63,26 @@ void calc()
   {
     VBtrip = 0;
   }
+
+  if (FuenfKmStrecke > 0 && FuenfKmLiter > 0) {
+    //Auswerten des Letzt-5-km-Schnitts
+    float _hilf = (100000 / (float)FuenfKmStrecke);
+    float _hilf2 = ((float)FuenfKmLiter / 1000000);
+    FuenfKm[5] = (_hilf * _hilf2);
+
+    int _hilf3 = 0;
+
+    for (int i = 0; i < 5; i++) {
+      if (FuenfKm[i] != 0) _hilf3++;
+      FuenfKmRes = FuenfKm[0] + FuenfKm[1] + FuenfKm[2] + FuenfKm[3] + FuenfKm[4];
+    }
+
+    FuenfKmRes = FuenfKmRes / _hilf3;
+  }
   //Durchschnittsverbrauch seit manuellem Reset in 10*ml / 100 km
   if (strecke_ges > 0)
   {
-    float _hilf = (1000 / (float)strecke_ges);
+    float _hilf = (100000 / (float)strecke_ges);
     float _hilf2 = ((float)liter_ges / 1000000);
     VBges = (_hilf * _hilf2);
     Reichweite = ((100 * Tank_berechnet) / (float)VBges);
@@ -47,12 +92,21 @@ void calc()
     VBges = 0;
     Reichweite = 0;
   }
-  //Fahrzeit in s, Strecke in 100m = Durchschnittsgeschwindigkeit
+  //Fahrzeit in s, Strecke in 10m = Durchschnittsgeschwindigkeit
   if (fahrzeit > 0)
   {
-    Geschwindigkeit_trip = (360 * ((float)strecke / (float)fahrzeit));
+    Geschwindigkeit_trip = (3.6 * ((float)strecke / (float)fahrzeit));
   }
   else Geschwindigkeit_trip = 0;
+
+  //Wenn der Motor läuft, aber kein Verbrauch erkannt wird, liegt offenbar ein Fehler vor und die CAN-Kommunikation startet neu
+  if (Drehzahl > 800 &&  VB < 1) {
+    //restart();
+  }
+  //Wenn der Motor über Leerlaufdrehzahl läuft, aber keine Strecke zurückgelegt wird (über einen längeren Zeitraum), liegt auch ein Fehler vor
+  if (Drehzahl > 1000 && fahrzeit > 2 && strecke < 1) {
+    //restart();
+  }
 }
 
 void analog_temp()
@@ -63,19 +117,27 @@ void analog_temp()
   Temp2 = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp2 * Temp2 )) * Temp2 );
   Oel_Temp = Temp2 - 278;            // Convert Kelvin to Celcius und ziehe einen Offset von 4 ab
 
-  if (Oel_Temp_alt < Aussen_Temp || Oel_Temp < Aussen_Temp)
-  {
-    Oel_Temp_alt = Aussen_Temp;
-    Oel_Temp = Aussen_Temp;
-  }
-  if (Oel_Temp < 70) Oel_Temp = 0.3 * Oel_Temp + 0.7 * Oel_Temp_alt;
-  if (Oel_Temp > 70) {
-    if (licht) //Falls das Licht an ist, wird der Temperaturwert des Öls verfälscht. Daher wird die Temperatur angepasst
-    {
-      Oel_Temp = Oel_Temp * 0.8 + 9;
-    }
+
+
+  //Ausreißer abfangen
+  if (Oel_Temp < ( Oel_Temp_alt - 30 ) || Oel_Temp > ( Oel_Temp_alt + 29 )) {
     Oel_Temp = 0.1 * Oel_Temp + 0.9 * Oel_Temp_alt;
   }
+
+
+  if (Oel_Temp < 70) {
+    Oel_Temp = 0.3 * Oel_Temp + 0.7 * Oel_Temp_alt;
+  }
+  else {
+    if (licht == true) //Falls das Licht an ist, wird der Temperaturwert des Öls verfälscht. Daher wird die Temperatur angepasst
+    {
+      Oel_Temp = 0.86 * Oel_Temp +6.25;
+
+    }
+    Oel_Temp = 0.1 * Oel_Temp + 0.9 * Oel_Temp_alt;
+
+  }
+
   Oel_Temp_alt = Oel_Temp;
 
 
@@ -85,8 +147,19 @@ void analog_temp()
   Temp = log(10000.0 / (1024.0 / Aussen_Temp - 1));
   Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp )) * Temp );
   Aussen_Temp = Temp - 273.15;            // Convert Kelvin to Celcius
+
+
+  if (Oel_Temp < (Wassertemp2 - 5)) {
+    Oel_Temp = Wassertemp2;
+    Oel_Temp_alt = Oel_Temp;
+  }
 }
 
+void hoehe() {
+  BMP_Temp = bme.readTemperature();
+  BMP_Druck = (bme.readPressure() / 100);
+  BMP_Hoehe = bme.readAltitude(1021);
+}
 
 void zaehler_reset()
 {
@@ -134,7 +207,7 @@ void HebelAuswerten()
       restart_pressed = true;
       restart_start = currentMillis;
     }
-    if (currentMillis - restart_start > 3000)
+    if (currentMillis - restart_start > 1500)
     {
       restart();
       restart_pressed = false; //Reset zurücksetzen
@@ -161,8 +234,8 @@ void HebelAuswerten()
       // Ist Taster gedrückt, schalte Bildschirm um
       if (next_val == true) {
         seite++;
-        //if (seite >= 6) seite = 0; //Mit DEBUG Bildschirm
-        if (seite >= 5) seite = 0; //Ohne DEBUG Bildschirm
+        if (seite >= 8) seite = 0; //Mit DEBUG+Druck Bildschirm
+        //if (seite >= 6) seite = 0; //Ohne DEBUG Bildschirm
       }
     }
   }
@@ -178,7 +251,7 @@ void restart()
   CAN.begin(CAN_5KBPS);
 
   analogWrite(LED_Backlight, 0);
-  delay(2000);
+  delay(1000);
 
   //(SW)Serielle-Schnittstelle mit 9600 baud initialisieren (Benötigt vom Motorsteuergerät)
   mySerial.begin(9600);

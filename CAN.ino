@@ -183,7 +183,7 @@ void CAN_calc()
   }
   else if (Byte_0x420_5 != 0)
   {
-    licht == true;
+    licht = true;
     analogWrite(LED_Backlight, 70);
   }
 
@@ -207,11 +207,14 @@ void CAN_VBcalc()
       //Fand kein ÜB statt, wird einfach die Differenz gebildet
       VB = CurrentVB - LastVB;
     }
-    //Korrekturfaktor: Verbrauch wird circa 7% zu gering angezeigt, daher wird VB mit 1.07 multipliziert
-    VB = VB * 1.08;
+    //Korrekturfaktor: Verbrauch wird circa 4% zu gering angezeigt, daher wird VB mit 1.04 multipliziert
+    //13.07.2019: 4% Verbauch zuviel: daher Korrekturfaktor von 1.04 entfernt
+    //VB = VB * 1.04;
+    
     //VB entspricht dem Verbrauch in µl pro halber Sekunde, multipliziert man diesen Wert mit 0.0072 kommt man auf l/h
     //Die Variable "liter" enthält die insgesamt verbrauchte Diesel-Menge seit Start (in µL)
     liter = liter + VB ;
+    FuenfKmLiter = FuenfKmLiter + VB;
     liter_ges = liter_ges + VB;
     VBh = VB * 0.0072;
     Tank_berechnet = 80.00 - ((float)liter_ges / 1000000);
@@ -222,9 +225,22 @@ void CAN_VBcalc()
 void save_Data() {
   //Insgesamt Verbrauchte Mikroliter seit Reset, startend an EEPROM-Adresse 100
   EEPROMWritelong(100, liter_ges);
+  EEPROM.put(110, liter_ges);
   //Insgesamt gefahrene Meter seit Reset, startend an EEPROM-Adresse 200
   EEPROMWritelong(200, strecke_ges);
+  EEPROM.put(210, strecke_ges);
   //Aktuelle MFA Seite
   EEPROMWritelong(300, seite);
+  EEPROM.put(310, seite);
+
+
+  //5 km Schnitt
+  EEPROM.put(400, FuenfKm[0]);
+  EEPROM.put(405, FuenfKm[1]);
+  EEPROM.put(410, FuenfKm[2]);
+  EEPROM.put(415, FuenfKm[3]);
+  EEPROM.put(420, FuenfKm[4]);
+
+  
 }
 

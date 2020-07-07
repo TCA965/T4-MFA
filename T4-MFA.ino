@@ -14,6 +14,17 @@
 #include "mcp_can.h"
 #include <math.h>
 
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BMP280.h>
+
+#define BMP_SCK 13
+#define BMP_MISO 12
+#define BMP_MOSI 11 
+#define BMP_CS 8
+
+Adafruit_BMP280 bme(BMP_CS); // hardware SPI
+
+
 //Pindefinitionen
 //Hintergrundbeleuchtung GLCD
 const byte LED_Backlight = 5;
@@ -53,7 +64,7 @@ byte Byte_0x420_3, Byte_0x420_4, Byte_0x420_5, Byte_0x480_2, Byte_0x480_3;
 
 //Variablen für berechnete Werte
 int Geschwindigkeit,  Drehzahl, Oeltemp, Wassertemp1, Wassertemp2, Gaspedal, Tank, seite;
-double Oel_Temp, Oel_Temp_alt, Aussen_Temp;
+double Oel_Temp, Oel_Temp_alt, Aussen_Temp, BMP_Temp, BMP_Druck, BMP_Hoehe;
 int Tempo_geschwindigkeit = 0;
 float Tank_berechnet;
 double Reichweite = 0;
@@ -70,13 +81,13 @@ double VB, VBh, VBkm, VBges, VBtrip;
 
 //"Zündungs"Variablen
 unsigned long liter = 0;
-unsigned int strecke = 0;
+unsigned long strecke = 0;
 boolean speichern = false;
 
 //Gesamt Variablen
 //Strecke in m (Hilfsvariable)
 float _strecke = 0;
-//Strecke in 100m
+//Strecke in m
 unsigned long liter_ges = 0;
 unsigned long strecke_ges = 0;
 
@@ -89,6 +100,10 @@ unsigned long VB_interval = 500;
 //Timer für Ausgabe, Intervall 350ms
 unsigned long out_lastMillis = 0;
 unsigned long out_interval = 350;
+
+//Timer für Druck-Ausgabe, Intervall 3000ms
+unsigned long bmp_lastMillis = 0;
+unsigned long bmp_interval = 3000;
 
 //Timer für gefahrene Strecke und Fahrzeit (in Sekunden)
 unsigned long strecke_lastMillis = 0;
@@ -110,6 +125,12 @@ boolean next_val = false;
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 50;
 
+//Durchschnittsverbrauch über letzten 5 km ausgeben
+float FuenfKm[6] = { 0, 0, 0, 0, 0, 0 };
+unsigned long FuenfKmStrecke = 0;
+unsigned long FuenfKmLiter = 0;
+//int FuenfKmZaehler = 0;
+float FuenfKmRes = 0;
 
 void setup()
 {
@@ -126,6 +147,9 @@ void setup()
 
   //(SW)Serielle-Schnittstelle mit 9600 baud initialisieren (Benötigt vom Motorsteuergerät)
   mySerial.begin(9600);
+
+  bme.begin();
+  delay(250);
 
   //CAN-Prozessoren verbinden
 START_INIT:
@@ -187,10 +211,22 @@ void loop()
 void loadData()
 {
   //Insgesamt Verbrauchte Mikroliter seit Reset, startend an EEPROM-Adresse 100
-  liter_ges =  EEPROMReadlong(100);
+  //liter_ges =  EEPROMReadlong(100);
+  EEPROM.get(110, liter_ges);
+  
   //Insgesamt gefahrene Meter seit Reset, startend an EEPROM-Adresse 200
-  strecke_ges =  EEPROMReadlong(200);
+  //strecke_ges =  EEPROMReadlong(200);
+  EEPROM.get(210, strecke_ges);
+  
+  //EEPROMWritelong(200, strecke_ges);
   //Aktuelle MFA Seite laden
-  seite = EEPROMReadlong(300);
+  //seite = EEPROMReadlong(300);
+  EEPROM.get(310, seite);
+
+  EEPROM.get(400, FuenfKm[0]);
+  EEPROM.get(405, FuenfKm[1]);
+  EEPROM.get(410, FuenfKm[2]);
+  EEPROM.get(415, FuenfKm[3]);
+  EEPROM.get(420, FuenfKm[4]);
 }
 
