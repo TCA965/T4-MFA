@@ -224,13 +224,13 @@ void CAN_VBcalc()
 
 void save_Data() {
   //Insgesamt Verbrauchte Mikroliter seit Reset, startend an EEPROM-Adresse 100
-  EEPROMWritelong(100, liter_ges);
+  //EEPROMWritelong(100, liter_ges);
   EEPROM.put(110, liter_ges);
   //Insgesamt gefahrene Meter seit Reset, startend an EEPROM-Adresse 200
-  EEPROMWritelong(200, strecke_ges);
+  //EEPROMWritelong(200, strecke_ges);
   EEPROM.put(210, strecke_ges);
   //Aktuelle MFA Seite
-  EEPROMWritelong(300, seite);
+  //EEPROMWritelong(300, seite);
   EEPROM.put(310, seite);
 
 
