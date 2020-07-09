@@ -61,7 +61,7 @@ void seite0()
 
     dogm.setXY(35, 35);
     dogm.setFont(font_7x14);
-    dogm.print(VBtrip);
+    dogm.print(VBtrip,1);
     if (VBtrip > 10)
     {
       // l/100 km Symbol
@@ -456,10 +456,10 @@ void schreibeOben_Unten(String Anzeige)
   dogm.print(Wassertemp2);
   dog_SetBitmapP(21, 9, grad, 8, 8);
   dogm.setXY(30, 3);
-  dogm.print("C / KI ");
+  dogm.print("C ");
   dogm.print(Wassertemp1);
-  dog_SetBitmapP(42, 9, grad, 8, 8);
-  dogm.setXY(51, 3);
+  dog_SetBitmapP(46, 9, grad, 8, 8);
+  dogm.setXY(55, 3);
   dogm.print("C");
 
   dog_SetBitmapP(85, 9, oil1, 8, 8);
