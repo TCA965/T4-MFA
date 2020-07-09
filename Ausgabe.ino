@@ -456,6 +456,10 @@ void schreibeOben_Unten(String Anzeige)
   dogm.print(Wassertemp2);
   dog_SetBitmapP(21, 9, grad, 8, 8);
   dogm.setXY(30, 3);
+  dogm.print("C / KI ");
+  dogm.print(Wassertemp1);
+  dog_SetBitmapP(42, 9, grad, 8, 8);
+  dogm.setXY(51, 3);
   dogm.print("C");
 
   dog_SetBitmapP(85, 9, oil1, 8, 8);
