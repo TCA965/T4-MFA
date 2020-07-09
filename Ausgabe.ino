@@ -106,28 +106,28 @@ void seite1()
     //Momentanverbrauch
     dogm.setXY(35, 35);
     dogm.setFont(font_7x14);
-    dogm.print(VBkm);
+    dogm.print(VBkm, 1);
     dogm.setFont(font_5x8);
     if (Geschwindigkeit > 5)
     {
       if (VBkm > 10)
       {
         // l/100 km Symbol
-        dog_SetBitmapP(77, 46, ver11, 8, 8);
-        dog_SetBitmapP(85, 46, ver12, 8, 8);
-        dog_SetBitmapP(87, 46, ver13, 8, 8);
-        dog_SetBitmapP(77, 38, ver21, 8, 8);
-        dog_SetBitmapP(85, 38, ver22, 8, 8);
-        dog_SetBitmapP(87, 38, ver23, 8, 8);
-      }
-      else
-      { // l/100 km Symbol
         dog_SetBitmapP(70, 46, ver11, 8, 8);
         dog_SetBitmapP(78, 46, ver12, 8, 8);
         dog_SetBitmapP(80, 46, ver13, 8, 8);
         dog_SetBitmapP(70, 38, ver21, 8, 8);
         dog_SetBitmapP(78, 38, ver22, 8, 8);
         dog_SetBitmapP(80, 38, ver23, 8, 8);
+      }
+      else
+      { // l/100 km Symbol
+        dog_SetBitmapP(63, 46, ver11, 8, 8);
+        dog_SetBitmapP(71, 46, ver12, 8, 8);
+        dog_SetBitmapP(73, 46, ver13, 8, 8);
+        dog_SetBitmapP(63, 38, ver21, 8, 8);
+        dog_SetBitmapP(71, 38, ver22, 8, 8);
+        dog_SetBitmapP(73, 38, ver23, 8, 8);
       }
     }
     else
@@ -169,7 +169,7 @@ void seite2()
     dogm.print("Verbraucht ");
 
     dogm.setFont(font_7x14);
-    dogm.print(((float)liter / 1000000));
+    dogm.print(((float)liter / 1000000),1);
     dogm.setFont(font_5x8);
     dogm.print(" l");
 
@@ -246,26 +246,26 @@ void seite4()
 
     dogm.setXY(50, 35);
     dogm.setFont(font_7x14);
-    dogm.print(VBges);
+    dogm.print(VBges, 1);
 
     if (VBges > 10)
     {
       // l/100 km Symbol
-      dog_SetBitmapP(87, 46, ver11, 8, 8);
-      dog_SetBitmapP(95, 46, ver12, 8, 8);
-      dog_SetBitmapP(97, 46, ver13, 8, 8);
-      dog_SetBitmapP(87, 38, ver21, 8, 8);
-      dog_SetBitmapP(95, 38, ver22, 8, 8);
-      dog_SetBitmapP(97, 38, ver23, 8, 8);
-    }
-    else
-    { // l/100 km Symbol
       dog_SetBitmapP(80, 46, ver11, 8, 8);
       dog_SetBitmapP(88, 46, ver12, 8, 8);
       dog_SetBitmapP(90, 46, ver13, 8, 8);
       dog_SetBitmapP(80, 38, ver21, 8, 8);
       dog_SetBitmapP(88, 38, ver22, 8, 8);
       dog_SetBitmapP(90, 38, ver23, 8, 8);
+    }
+    else
+    { // l/100 km Symbol
+      dog_SetBitmapP(73, 46, ver11, 8, 8);
+      dog_SetBitmapP(81, 46, ver12, 8, 8);
+      dog_SetBitmapP(83, 46, ver13, 8, 8);
+      dog_SetBitmapP(73, 38, ver21, 8, 8);
+      dog_SetBitmapP(81, 38, ver22, 8, 8);
+      dog_SetBitmapP(83, 38, ver23, 8, 8);
     }
 
     //Tankinhalt
@@ -344,7 +344,7 @@ void seite6()
     
   dogm.setXY(20, 55);
   dogm.print("5-km Schnitt: ");  
-  dogm.print(FuenfKmRes);
+  dogm.print(FuenfKmRes, 1);
   
     //Oben Links: x = 0, y = 53      x = 4-120
     //Unten Rechts: x= 127, y = 3    y= 56-2
