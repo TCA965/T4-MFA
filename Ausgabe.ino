@@ -61,25 +61,25 @@ void seite0()
 
     dogm.setXY(35, 35);
     dogm.setFont(font_7x14);
-    dogm.print(VBtrip,1);
+    dogm.print(VBtrip, 1);
     if (VBtrip > 10)
     {
       // l/100 km Symbol
-      dog_SetBitmapP(77, 46, ver11, 8, 8);
-      dog_SetBitmapP(85, 46, ver12, 8, 8);
-      dog_SetBitmapP(87, 46, ver13, 8, 8);
-      dog_SetBitmapP(77, 38, ver21, 8, 8);
-      dog_SetBitmapP(85, 38, ver22, 8, 8);
-      dog_SetBitmapP(87, 38, ver23, 8, 8);
-    }
-    else
-    { // l/100 km Symbol
       dog_SetBitmapP(70, 46, ver11, 8, 8);
       dog_SetBitmapP(78, 46, ver12, 8, 8);
       dog_SetBitmapP(80, 46, ver13, 8, 8);
       dog_SetBitmapP(70, 38, ver21, 8, 8);
       dog_SetBitmapP(78, 38, ver22, 8, 8);
       dog_SetBitmapP(80, 38, ver23, 8, 8);
+    }
+    else
+    { // l/100 km Symbol
+      dog_SetBitmapP(63, 46, ver11, 8, 8);
+      dog_SetBitmapP(71, 46, ver12, 8, 8);
+      dog_SetBitmapP(73, 46, ver13, 8, 8);
+      dog_SetBitmapP(63, 38, ver21, 8, 8);
+      dog_SetBitmapP(71, 38, ver22, 8, 8);
+      dog_SetBitmapP(73, 38, ver23, 8, 8);
     }
 
 
