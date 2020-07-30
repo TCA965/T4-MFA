@@ -79,6 +79,8 @@ void dogm_print() {
   }
 }
 
+
+//Seite MFA
 void seite0()
 {
   //5 px Breit, 8 px Hoch
@@ -127,6 +129,7 @@ void seite0()
 
 int fahrzeit_h, fahrzeit_min, fahrzeit_mod;
 
+//Seite Tempomat
 void seite1()
 {
   //5 px Breit, 8 px Hoch
@@ -186,6 +189,7 @@ void seite1()
   } while ( dogm.next() );
 }
 
+//Seite Trip 1
 void seite2()
 {
   //5 px Breit, 8 px Hoch
@@ -216,6 +220,7 @@ void seite2()
   } while ( dogm.next() );
 }
 
+//Seite Trip 2
 void seite3()
 {
   //5 px Breit, 8 px Hoch
@@ -261,6 +266,7 @@ void seite3()
   } while ( dogm.next() );
 }
 
+//Seite Gesamt
 void seite4()
 {
   //5 px Breit, 8 px Hoch
@@ -331,6 +337,8 @@ void seite4()
   } while ( dogm.next() );
 }
 
+
+//Seite Debug
 void seite5()
 {
   //5 px Breit, 8 px Hoch
@@ -365,6 +373,7 @@ void seite5()
   } while ( dogm.next() );
 }
 
+//Seite 5-Km Schnitt
 void seite6()
 {
   //5 px Breit, 8 px Hoch
@@ -423,6 +432,7 @@ void seite6()
   } while ( dogm.next() );
 }
 
+//Seite Höhe
 void seite7()
 {
   //5 px Breit, 8 px Hoch
