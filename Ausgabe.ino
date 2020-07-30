@@ -8,43 +8,73 @@
 //Oeltemp = Öltemperatur
 //Wassertemp1 = Wassertemperatur
 
-void dogm_print()
-{
-  if (currentMillis - out_lastMillis >= out_interval)
-  {
+void dogm_print() {
+  if (currentMillis - out_lastMillis >= out_interval) {
     out_lastMillis = currentMillis;
-    switch (seite)
-    {
-      case 0:
-        seite0();
-        break;
-      case 1:
-        seite1();
-        break;
-      case 2:
-        seite2();
-        break;
-      case 3:
-        seite3();
-        break;
-      case 4:
-        seite4();
-        break;
-      case 5:
-        seite5();
-        break;
-      case 6:
-        seite6();
-        break;
-      case 7:
-        seite7();
-        break;  
+    if (Stellung == 1) {
+      switch (seite)
+      {
+        case 0:
+          //MFA
+          seite0();
+          break;
+        case 1:
+          //Tempomat
+          seite1();
+          break;
+        case 2:
+          //Trip 1
+          seite2();
+          break;
+        case 3:
+          //Trip 2
+          seite3();
+          break;
+        case 4:
+          //Bilanz
+          seite4();
+          break;
+        case 5:
+          //Debug
+          seite5();
+          break;
+        case 6:
+          //5-km Schnitt
+          seite6();
+          break;
+        case 7:
+          //Höhe
+          seite7();
+          break;
+      }
+    }
+    else if (Stellung == 2) {
+      if (seite > 3) seite = 0;
+      switch (seite)
+      {
+        case 0:
+          //MFA
+          seite0();
+          break;
+        case 1:
+          //Tempomat
+          seite1();
+          break;
+        case 2:
+          //Bilanz
+          seite4();
+          break;
+        case 3:
+          //5-km Schnitt
+          seite6();
+          break;
+      }
     }
     analog_temp();
   }
   if (currentMillis - bmp_lastMillis >= bmp_interval)
   {
-    bmp_lastMillis = currentMillis;    
+    bmp_lastMillis = currentMillis;
     hoehe();
   }
 }
@@ -169,7 +199,7 @@ void seite2()
     dogm.print("Verbraucht ");
 
     dogm.setFont(font_7x14);
-    dogm.print(((float)liter / 1000000),1);
+    dogm.print(((float)liter / 1000000), 1);
     dogm.setFont(font_5x8);
     dogm.print(" l");
 
@@ -179,7 +209,7 @@ void seite2()
     dogm.print("Strecke ");
 
     dogm.setFont(font_7x14);
-    dogm.print(((float)strecke / 1000),1);
+    dogm.print(((float)strecke / 1000), 1);
     dogm.setFont(font_5x8);
     dogm.print(" km");
 
@@ -270,7 +300,7 @@ void seite4()
 
     //Tankinhalt
 
-    
+
     /* dogm.setXY(4, 19);
       dogm.setFont(font_6x10);
       dogm.print("Tank");
@@ -279,9 +309,9 @@ void seite4()
       dogm.setFont(font_6x10);
       dogm.print(" ");
 
-    */  
-    
-    
+    */
+
+
     //Tankinhalt
     dogm.setXY(4, 19);
     dogm.setFont(font_6x10);
@@ -293,7 +323,7 @@ void seite4()
     dogm.print(" l");
 
 
-    dogm.setXY(95, 19);      
+    dogm.setXY(95, 19);
     dogm.setFont(font_5x8);
     dogm.print(Tank);
     dogm.print(" l");
@@ -314,7 +344,7 @@ void seite5()
     dogm.print("Strecke");
     dogm.setXY(50, 35);
     dogm.setFont(font_7x14);
-    dogm.print((strecke_ges / 1000),1);
+    dogm.print((strecke_ges / 1000), 1);
     dogm.setFont(font_5x8);
     dogm.print(" km");
 
@@ -327,9 +357,9 @@ void seite5()
     dogm.setFont(font_5x8);
     dogm.print(" l");
 
-    dogm.setXY(110, 16);      
+    dogm.setXY(110, 16);
     dogm.setFont(font_5x8);
-    dogm.print((80-Tank));
+    dogm.print((80 - Tank));
     dogm.print(" l");
 
   } while ( dogm.next() );
@@ -341,53 +371,53 @@ void seite6()
   dogm.start();
   do {
 
-    
-  dogm.setXY(20, 55);
-  dogm.print("5-km Schnitt: ");  
-  dogm.print(FuenfKmRes, 1);
-  
+
+    dogm.setXY(20, 55);
+    dogm.print("5-km Schnitt: ");
+    dogm.print(FuenfKmRes, 1);
+
     //Oben Links: x = 0, y = 53      x = 4-120
     //Unten Rechts: x= 127, y = 3    y= 56-2
 
-  
-  //X-Achse
-  dogm.setSize(0);
-  dogm.drawLine(25, 5, 115, 5);
-  //Striche
-  for(int i = 1; i <= 5; i++) {
+
+    //X-Achse
+    dogm.setSize(0);
+    dogm.drawLine(25, 5, 115, 5);
+    //Striche
+    for (int i = 1; i <= 5; i++) {
       int temp = (i * 17) + 25;
       //Unterteilungsstriche
-      dogm.drawLine(temp, 2, temp, 5);  
+      dogm.drawLine(temp, 2, temp, 5);
 
       //Werte
       //0-10l zu Pixel 12 - 52
-      int graph = map(FuenfKm[(i-1)], 0, 10, 5, 51);
+      int graph = map(FuenfKm[(i - 1)], 0, 10, 5, 51);
       //dogm.drawLine(temp, 8, temp, graph);
-      dogm.setBox((temp-2), 5, (temp+2), graph);
-      
-  }
-  
+      dogm.setBox((temp - 2), 5, (temp + 2), graph);
 
-  //Y-Achse
-  dogm.drawLine(25, 5, 25, 51);
+    }
 
-  for(int i = 1; i <= 4; i++) {
+
+    //Y-Achse
+    dogm.drawLine(25, 5, 25, 51);
+
+    for (int i = 1; i <= 4; i++) {
       int temp = (i * 12) + 2;
       //Unterteilungsstriche
       dogm.drawLine(22, temp, 25, temp);
 
       //Beschriftung
       dogm.setFont(font_5x8);
-      dogm.setXY(4, (temp-5));
+      dogm.setXY(4, (temp - 5));
 
-      switch(i) {
+      switch (i) {
         case 1: dogm.print("2.5"); break;
         case 2: dogm.print("5.0"); break;
         case 3: dogm.print("7.5"); break;
         case 4: dogm.print("10"); break;
       }
-        
-  } 
+
+    }
 
 
   } while ( dogm.next() );
@@ -406,21 +436,19 @@ void seite7()
     dogm.print("Druck");
     dogm.setXY(50, 35);
     dogm.setFont(font_7x14);
-    dogm.print(BMP_Druck,0);
+    dogm.print(BMP_Druck, 0);
     dogm.setFont(font_5x8);
     dogm.print(" hPa");
 
     //Höhe und Temperatur
     dogm.setXY(4, 19);
     dogm.setFont(font_6x10);
-    dogm.print("Hoehe ");
+    dogm.print("Hoehe");
     dogm.setFont(font_7x14);
+    dogm.setXY(50, 19);
     dogm.print(BMP_Hoehe, 0);
     dogm.setFont(font_5x8);
     dogm.print(" m ");
-    dogm.print("T: ");
-    dogm.print(BMP_Temp,1);
-    dogm.print(" C");
 
 
   } while ( dogm.next() );
@@ -453,14 +481,15 @@ void schreibeOben_Unten(String Anzeige)
   dogm.setFont(font_5x8);
   dog_SetBitmapP(5, 10, wa_thermo, 8, 8);
   dogm.setXY(16, 3);
-  dogm.print(Wassertemp2);
+  dogm.print(Wassertemp1);
   dog_SetBitmapP(21, 9, grad, 8, 8);
   dogm.setXY(30, 3);
   dogm.print("C ");
-  dogm.print(Wassertemp1);
+  /*dogm.print(Wassertemp1);
   dog_SetBitmapP(46, 9, grad, 8, 8);
   dogm.setXY(55, 3);
   dogm.print("C");
+  */
 
   dog_SetBitmapP(85, 9, oil1, 8, 8);
   dog_SetBitmapP(93, 9, oil2, 8, 8);

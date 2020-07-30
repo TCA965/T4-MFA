@@ -62,6 +62,8 @@ byte Byte_0x280_0, Byte_0x280_3, Byte_0x280_4, Byte_0x280_5, Byte_0x288_1, Byte_
 byte Byte_0x288_4, Byte_0x320_0, Byte_0x320_1, Byte_0x320_2, Byte_0x320_4, Byte_0x388_1;
 byte Byte_0x420_3, Byte_0x420_4, Byte_0x420_5, Byte_0x480_2, Byte_0x480_3;
 
+byte Stellung;
+
 //Variablen für berechnete Werte
 int Geschwindigkeit,  Drehzahl, Oeltemp, Wassertemp1, Wassertemp2, Gaspedal, Tank, seite;
 double Oel_Temp, Oel_Temp_alt, Aussen_Temp, BMP_Temp, BMP_Druck, BMP_Hoehe;

@@ -191,12 +191,14 @@ void HebelAuswerten()
   }
   else if (_wert < 345 && _wert > 335) //Stellung '1'
   {
+    Stellung = 1;
     reset_pressed = false; //Reset wurde losgelassen
     restart_pressed = false;
     next_pressed = false;
   }
   else if (_wert < 10) //Stellung '2'
   {
+    Stellung = 2;
     reset_pressed = false; //Reset wurde losgelassen
     restart_pressed = false;
     next_pressed = false;
