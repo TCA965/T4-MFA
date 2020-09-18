@@ -85,7 +85,8 @@ void calc()
     float _hilf = (100000 / (float)strecke_ges);
     float _hilf2 = ((float)liter_ges / 1000000);
     VBges = (_hilf * _hilf2);
-    Reichweite = ((100 * Tank_berechnet) / (float)VBges);
+   // Reichweite = ((100 * Tank_berechnet) / (float)VBges);
+    Reichweite = ((100 * Tank) / (float)VBges);
   }
   else
   {
