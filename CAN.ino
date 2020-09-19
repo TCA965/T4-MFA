@@ -125,7 +125,7 @@ void CAN_calc()
 
   //Tankinhalt
   Tank = Byte_0x320_2;
-  if (Tank > 130) Tank -= 130;
+  if (Tank > 128) Tank -= 128;
 
   //Geschwindigkeit
   Geschwindigkeit = Byte_0x320_4 * 1.34;

@@ -324,14 +324,14 @@ void seite4()
     dogm.print("Tank");
     dogm.setXY(50, 19);
     dogm.setFont(font_7x14);
-    dogm.print(Tank_berechnet, 1);
+    dogm.print(Tank);
     dogm.setFont(font_5x8);
     dogm.print(" l");
 
 
     dogm.setXY(95, 19);
     dogm.setFont(font_5x8);
-    dogm.print(Tank);
+    dogm.print(Tank_berechnet, 0);
     dogm.print(" l");
 
   } while ( dogm.next() );
