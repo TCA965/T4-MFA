@@ -209,7 +209,10 @@ void CAN_VBcalc()
     }
     //Korrekturfaktor: Verbrauch wird circa 4% zu gering angezeigt, daher wird VB mit 1.04 multipliziert
     //13.07.2019: 4% Verbauch zuviel: daher Korrekturfaktor von 1.04 entfernt
-    //VB = VB * 1.04;
+
+    //11.11.2020 Im Zuge des Düsenumbaus auf 0.216mm Düsen, zeigte die MFA einen Durchschnittsverbrauch von 6.0 l / 100 km an, während die Tankstelle 9.0  l / 100 km ergab.
+    // Also 33% zuwenig
+    VB = VB * 1.33;
     
     //VB entspricht dem Verbrauch in µl pro halber Sekunde, multipliziert man diesen Wert mit 0.0072 kommt man auf l/h
     //Die Variable "liter" enthält die insgesamt verbrauchte Diesel-Menge seit Start (in µL)
