@@ -19,7 +19,7 @@
             ],
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "msvc-x64",
+            "intelliSenseMode": "clang-x64",
             "forcedInclude": [
                 "C:\\Users\\T410\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.23\\cores\\arduino\\Arduino.h"
             ]
