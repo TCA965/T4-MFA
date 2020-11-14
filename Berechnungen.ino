@@ -249,7 +249,7 @@ void HebelAuswerten()
 
 void restart()
 {
-  mySerial.end();
+  obd.end();
 
   CAN.begin(CAN_5KBPS);
 
@@ -257,7 +257,11 @@ void restart()
   delay(1000);
 
   //(SW)Serielle-Schnittstelle mit 9600 baud initialisieren (Benötigt vom Motorsteuergerät)
-  mySerial.begin(9600);
+  pinMode(pinKLineTX, OUTPUT);
+  digitalWrite(pinKLineTX, HIGH);
+
+  Serial.begin(19200);
+  Serial.println(F("RESTART");
 
   analogWrite(LED_Backlight, 200);
 

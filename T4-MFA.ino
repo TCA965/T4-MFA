@@ -22,6 +22,9 @@
 #define BMP_MOSI 11 
 #define BMP_CS 8
 
+#define pinKLineRX 4
+#define pinKLineTX 3
+
 Adafruit_BMP280 bme(BMP_CS); // hardware SPI
 
 
@@ -43,7 +46,7 @@ const int Aussen_Temp_Pin = A4;
 
 
 //Software-Serial RX, TX
-SoftwareSerial mySerial(4, 3);
+SoftwareSerial obd(pinKLineRX, pinKLineTX);
 
 //CAN Chip Select Pin 9
 MCP_CAN CAN(9);
@@ -148,7 +151,11 @@ void setup()
   analogWrite(LED_Backlight, 200);
 
   //(SW)Serielle-Schnittstelle mit 9600 baud initialisieren (Benötigt vom Motorsteuergerät)
-  mySerial.begin(9600);
+  pinMode(pinKLineTX, OUTPUT);
+  digitalWrite(pinKLineTX, HIGH);
+
+  Serial.begin(19200);
+  Serial.println(F("START");
 
   bme.begin();
   delay(250);
