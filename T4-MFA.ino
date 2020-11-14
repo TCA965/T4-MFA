@@ -155,7 +155,7 @@ void setup()
   digitalWrite(pinKLineTX, HIGH);
 
   Serial.begin(19200);
-  Serial.println(F("START");
+  Serial.println(F("START"));
 
   bme.begin();
   delay(250);

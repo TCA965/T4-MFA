@@ -261,7 +261,7 @@ void restart()
   digitalWrite(pinKLineTX, HIGH);
 
   Serial.begin(19200);
-  Serial.println(F("RESTART");
+  Serial.println(F("RESTART"));
 
   analogWrite(LED_Backlight, 200);
 
