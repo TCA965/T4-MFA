@@ -2,5 +2,6 @@
     "sketch": "T4-MFA.ino",
     "board": "arduino:avr:diecimila",
     "configuration": "cpu=atmega328",
-    "programmer": "AVRISP mkII"
+    "programmer": "AVRISP mkII",
+    "port": "COM3"
 }
