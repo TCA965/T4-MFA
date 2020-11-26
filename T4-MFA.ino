@@ -2,6 +2,7 @@
 //DOGM128-R wird als Display verwendet
 //Optokoppler über Software-Serial mit K-Linie verbunden, um Fehlercodes auszulesen
 //Thaddäus Köhler / Januar 2018
+// Frei Pins: A0, A1, A2, 7, 10
 
 
 //Verwendete Bibliotheken
