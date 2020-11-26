@@ -16,12 +16,6 @@ void calc()
     //Intervall von 1s = Strecke nach 1 s = Geschwindigkeit in m/s
 
     // Geschwindigkeit (in km/h) / 3.6  (=m/s) * Zeit = Meter
-    //10.06.2019: Stimmt nicht: Gefahrene Strecke wurde 2,8% zu wenig angegeben. Daher 1.028 als Korrekturfaktor
-    //Korrekturfaktor gelöscht
-
-    //13.07.2019: Stimmt nicht: Gefahrene Strecke wurde 1.2% zu viel angegeben. Daher 0.988 als Korrekturfaktor
-
-    //11.05.2020: MFA zeigt 1% zu wenig Strecke an. Korrekturfaktor wird wieder auf 1 gesetzt
     _strecke = _strecke + ( (Geschwindigkeit / 3.6 ) * ((currentMillis - strecke_lastMillis) / strecke_interval) * 1);
 
     strecke_lastMillis = currentMillis;
