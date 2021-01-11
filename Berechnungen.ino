@@ -149,11 +149,8 @@ void analog_temp()
   Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp )) * Temp );
   Aussen_Temp = Temp - 273.15;            // Convert Kelvin to Celcius
 
-
-  if (Oel_Temp < (Wassertemp2 - 5)) {
-    Oel_Temp = Wassertemp2;
-    Oel_Temp_alt = Oel_Temp;
-  }
+  //11.01.2020 Offset -4°C
+  Aussen_Temp = Aussen_Temp - 4;
 }
 
 void hoehe() {

@@ -68,11 +68,11 @@ void CAN_calc()
   //Berechnung der Motor 1 Daten
   //Kupplung
   if (Byte_0x280_0 == 97)
-  { 
-     kupplung = true;
-     tempo_aktiv = false;
-   }
-  else if (Byte_0x280_0 == 105) 
+  {
+    kupplung = true;
+    tempo_aktiv = false;
+  }
+  else if (Byte_0x280_0 == 105)
   {
     kupplung = false;
   }
@@ -94,9 +94,12 @@ void CAN_calc()
 
   //Berechnung der Motor 2 Daten
   //Wassertemperatur 2
-  Wassertemp2 = (Byte_0x288_1 * 0.75) - 48;
-  if (Wassertemp2 < 0) Wassertemp2 = 0;
-
+  if (Byte_0x288_1 != 0) {  
+    Wassertemp2 = (Byte_0x288_1 - 64) * 0.75;
+  }
+  else {
+    Wassertemp2 = 0;
+  }
   //Bremspedal und Tempomat aktiv/inaktiv
   if (Byte_0x288_2 == 16)
   {
@@ -172,8 +175,12 @@ void CAN_calc()
   if (Oeltemp < 0) Oeltemp = 0;
 
   //Wassertemperatur1
-  Wassertemp1 = (Byte_0x420_4 - 64) * 0.75;
-  if (Wassertemp1 < 0) Wassertemp1 = 0;
+  if (Byte_0x420_3 != 0) {
+   Wassertemp1 = (Byte_0x420_4 - 64) * 0.75;
+  }
+  else {
+    Wassertemp1 = 0;
+  }
 
   //Licht
   if (Byte_0x420_5 == 0)
@@ -184,7 +191,7 @@ void CAN_calc()
   else if (Byte_0x420_5 != 0)
   {
     licht = true;
-    analogWrite(LED_Backlight, 70);
+    analogWrite(LED_Backlight, 50);
   }
 
   //Berechnung der Motor 3 Daten
@@ -212,8 +219,10 @@ void CAN_VBcalc()
 
     //11.11.2020 Im Zuge des Düsenumbaus auf 0.216mm Düsen, zeigte die MFA einen Durchschnittsverbrauch von 6.0 l / 100 km an, während die Tankstelle 9.0  l / 100 km ergab.
     // Also 33% zuwenig
-    VB = VB * 1.33;
-    
+
+    //11.01.2021 6% hinzugefügt
+    VB = VB * 1.41;
+
     //VB entspricht dem Verbrauch in µl pro halber Sekunde, multipliziert man diesen Wert mit 0.0072 kommt man auf l/h
     //Die Variable "liter" enthält die insgesamt verbrauchte Diesel-Menge seit Start (in µL)
     liter = liter + VB ;
@@ -244,6 +253,6 @@ void save_Data() {
   EEPROM.put(415, FuenfKm[3]);
   EEPROM.put(420, FuenfKm[4]);
 
-  
+
 }
 

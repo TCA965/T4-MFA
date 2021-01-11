@@ -491,14 +491,20 @@ void schreibeOben_Unten(String Anzeige)
   dogm.setFont(font_5x8);
   dog_SetBitmapP(5, 10, wa_thermo, 8, 8);
   dogm.setXY(16, 3);
-  dogm.print(Wassertemp1);
+  if (Wassertemp1 < Wassertemp2) {
+    dogm.print(Wassertemp1);
+  }
+  else {
+    dogm.print(Wassertemp2);
+  }
+
   dog_SetBitmapP(21, 9, grad, 8, 8);
   dogm.setXY(30, 3);
   dogm.print("C ");
   /*dogm.print(Wassertemp1);
-  dog_SetBitmapP(46, 9, grad, 8, 8);
-  dogm.setXY(55, 3);
-  dogm.print("C");
+    dog_SetBitmapP(46, 9, grad, 8, 8);
+    dogm.setXY(55, 3);
+    dogm.print("C");
   */
 
   dog_SetBitmapP(85, 9, oil1, 8, 8);
