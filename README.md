@@ -1,6 +1,6 @@
 # T4-MFA
 
-"Projekt-MFA_update_neues_design.ino" ist das Hauptprogramm, die anderen Dateien sind "Tabs" in der Arduino IDE.
+"T4-MFA.ino" ist das Hauptprogramm, die anderen Dateien sind "Tabs" in der Arduino IDE.
 Es enthält die meisten Variablen und Pin-Definitionen und enthält die "setup" und die "loop" Funktion.
 
 "Ausgabe" sorgt, wie der Name schon sagt, für die Ausgabe. Hier werden die umschaltbaren Seiten erstellt.
@@ -15,4 +15,4 @@ In "Berechnungen" werden Verbräuche und Co berechnet und der MFA-Hebel abgefrag
 
 In "symbols.h" werden benutzerdefinierte Symbole erzeugt. (Tempomat, Tanksymbol, Thermometer...)
 
-"EEPROMAnything.h" ist eine Erweiterung der Arduino EEPROM.write() Funktionalität. (EEPROM.write kann nur Byte Datentypen speichern, mit der Routine können auch long-Variablen gespeichert werden.
+"EEPROMAnything.h" ist eine Erweiterung der Arduino EEPROM.write() Funktionalität. (EEPROM.write kann nur Byte Datentypen speichern, mit der Routine können auch long-Variablen gespeichert werden. (Wird nicht mehr genutzt)
