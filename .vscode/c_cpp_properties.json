@@ -9,13 +9,12 @@
                 "D:\\nextcloud\\Arduino\\libraries\\**",
                 "C:\\Program Files (x86)\\arduino-1.8.5\\hardware\\**",
                 "C:\\Program Files (x86)\\arduino-1.8.5\\libraries\\**"
-
-
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "USBCON"
             ],
             "cStandard": "c17",
             "cppStandard": "c++17",
