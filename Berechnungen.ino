@@ -143,8 +143,9 @@ void analog_temp()
   Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp )) * Temp );
   Aussen_Temp = Temp - 273.15;            // Convert Kelvin to Celcius
 
-  //11.01.2020 Offset -4°C
-  Aussen_Temp = Aussen_Temp - 4;
+
+  //Anpassung 02.03.2021 nach Vergleich mit Climatronic
+  Aussen_Temp = (Aussen_Temp * 1.13) - 3.79;
 }
 
 void hoehe() {
