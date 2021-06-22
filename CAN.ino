@@ -221,7 +221,9 @@ void CAN_VBcalc()
     // Also 33% zuwenig
 
     //11.01.2021 6% hinzugefügt
-    VB = VB * 1.41;
+   
+    //08.04.2021 Faktor entfernt, da AHY Pumpenmapping
+    //VB = VB * 1.41;
 
     //VB entspricht dem Verbrauch in µl pro halber Sekunde, multipliziert man diesen Wert mit 0.0072 kommt man auf l/h
     //Die Variable "liter" enthält die insgesamt verbrauchte Diesel-Menge seit Start (in µL)
